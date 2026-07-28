@@ -1,0 +1,205 @@
+package com.expensetracker.service.impl;
+
+import com.expensetracker.dto.reportResponse.BudgetReportResponse;
+import com.expensetracker.dto.reportResponse.CategoryExpenseResponse;
+import com.expensetracker.dto.response.MonthlyReportEmailResponse;
+import com.expensetracker.entity.User;
+import com.expensetracker.service.EmailService;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.scheduling.annotation.Async;
+import org.springframework.stereotype.Service;
+
+import java.time.Month;
+
+@Service
+@RequiredArgsConstructor
+public class EmailServiceImpl implements EmailService {
+
+    private final JavaMailSender mailSender;
+
+    @Value("${spring.mail.username}")
+    private String fromEmail;
+
+
+    @Override
+    public void sendSimpleEmail(String to, String subject, String body) {
+
+        SimpleMailMessage message = new SimpleMailMessage();
+
+        message.setFrom(fromEmail);
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(body);
+
+        mailSender.send(message);
+
+    }
+
+    @Override
+    @Async
+    public void sendWelcomeEmail(User user) {
+
+        String subject = "Welcome to Smart Expense Tracker";
+
+        String body = """
+            Hello %s,
+
+            Welcome to Smart Expense Tracker!
+
+            Your account has been created successfully.
+
+            We are excited to help you manage your income, expenses, and budgets.
+
+            Happy Saving!
+
+            Regards,
+            Smart Expense Tracker Team
+            """.formatted(user.getFullName());
+
+        sendSimpleEmail(
+                user.getEmail(),
+                subject,
+                body
+        );
+
+    }
+
+    @Override
+    @Async
+    public void sendPasswordChangedEmail(User user) {
+
+        String subject = "Password Changed Successfully";
+
+        String body = """
+            Hello %s,
+
+            Your password has been changed successfully.
+
+            If you did not perform this action, please change your password immediately or contact support.
+
+            Regards,
+            Smart Expense Tracker Team
+            """.formatted(user.getFullName());
+
+        sendSimpleEmail(
+                user.getEmail(),
+                subject,
+                body
+        );
+
+    }
+
+    @Override
+    @Async
+    public void sendOtpEmail(User user, String otp) {
+        String subject = "Password Reset OTP";
+
+        String body = """
+            Hello %s,
+
+            Your OTP for password reset is:
+
+            %s
+
+            This OTP is valid for 10 minutes.
+
+            If you didn't request this, please ignore this email.
+
+            Regards,
+            Smart Expense Tracker Team
+            """.formatted(user.getFullName(), otp);
+
+        sendSimpleEmail(
+                user.getEmail(),
+                subject,
+                body
+        );
+
+    }
+
+    @Override
+    @Async
+    public void sendMonthlyReportEmail(User user, MonthlyReportEmailResponse reportResponse) {
+
+        StringBuilder message = new StringBuilder();
+
+        message.append("Hello ")
+                .append(user.getFullName())
+                .append(",\n\n");
+
+        message.append("Here is your monthly financial report for ")
+                .append(Month.of(reportResponse.getMonth()))
+                .append(" ")
+                .append(reportResponse.getYear())
+                .append(".\n\n");
+
+        message.append("---------------------------------\n");
+        message.append("SUMMARY\n");
+        message.append("---------------------------------\n");
+
+        message.append("Total Income  : ₹")
+                .append(reportResponse.getTotalIncome())
+                .append("\n");
+
+        message.append("Total Expense : ₹")
+                .append(reportResponse.getTotalExpense())
+                .append("\n");
+
+        message.append("Savings       : ₹")
+                .append(reportResponse.getTotalSavings())
+                .append("\n\n");
+
+        message.append("---------------------------------\n");
+        message.append("CATEGORY-WISE EXPENSES\n");
+        message.append("---------------------------------\n");
+
+        for (CategoryExpenseResponse expense : reportResponse.getCategoryWiseExpenses()) {
+
+            message.append(expense.getCategory())
+                    .append(" : ₹")
+                    .append(expense.getTotalSpent())
+                    .append("\n");
+        }
+
+        message.append("\n");
+
+        message.append("---------------------------------\n");
+        message.append("BUDGET REPORT\n");
+        message.append("---------------------------------\n");
+
+        for (BudgetReportResponse budget : reportResponse.getBudgetReports()) {
+
+            message.append(budget.getCategory())
+                    .append("\n");
+
+            message.append("  Limit     : ₹")
+                    .append(budget.getMonthlyLimit())
+                    .append("\n");
+
+            message.append("  Spent     : ₹")
+                    .append(budget.getSpent())
+                    .append("\n");
+
+            message.append("  Remaining : ₹")
+                    .append(budget.getRemaining())
+                    .append("\n\n");
+        }
+
+        message.append("Keep tracking your expenses and have a great month!\n\n");
+
+        message.append("Regards,\n");
+        message.append("Smart Expense Tracker");
+
+        sendSimpleEmail(
+                user.getEmail(),
+                "Monthly Expense Report - " + Month.of(reportResponse.getMonth()) + " " + reportResponse.getYear(),
+                message.toString()
+        );
+
+    }
+
+
+}
