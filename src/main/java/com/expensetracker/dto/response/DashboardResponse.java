@@ -24,5 +24,7 @@ public class DashboardResponse {
 
     private List<RecentTransactionResponse> recentTransactions;
 
+    private List<RecentTransactionResponse> allTransactions;
+
     private List<CategoryExpenseResponse> categoryExpenses;
 }

@@ -11,6 +11,9 @@ public interface UserRepository extends JpaRepository<User, Long> {
     // dozens of methods already inherited from JpaRepository
     // these are custom methods:
 
+    // find by id
+    Optional<User> findById(Long id);
+
     // to avoid messy null checks
     Optional<User> findByEmail(String email);
 

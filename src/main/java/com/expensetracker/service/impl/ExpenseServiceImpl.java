@@ -22,7 +22,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -120,7 +122,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional(readOnly = true)
     public ExpenseResponse getExpenseById(Long expenseId) {
 
-        Expense expense = expenseRepository.findById(expenseId).orElseThrow(() -> new ResourceNotFoundException("Expense not found."));
+        User currentUser = currentUserService.getCurrentUser();
+
+        Expense expense = expenseRepository.findByIdAndUser(expenseId, currentUser).orElseThrow(() -> new ResourceNotFoundException("Expense not found."));
 
         return mapToExpenseResponse(expense);
     }
@@ -132,7 +136,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         User currentUser = currentUserService.getCurrentUser();
 
         // To prevent access expense of a user by another user
-        Expense expense = expenseRepository.findByIdAndUser(expenseId, currentUser);
+        Expense expense = expenseRepository.findByIdAndUser(expenseId, currentUser).orElseThrow(() -> new ResourceNotFoundException("Expense not found."));
 
         Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Category not found."));
 
@@ -141,7 +145,8 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setDescription(request.getDescription());
         expense.setExpenseDate(request.getExpenseDate());
         expense.setPaymentMethod(request.getPaymentMethod());
-        expense.setPaymentMethod(request.getPaymentMethod());
+        expense.setUpdatedAt(LocalDateTime.now(Clock.systemDefaultZone()));
+
         // Foreign key
         expense.setCategory(category);
 
@@ -155,7 +160,9 @@ public class ExpenseServiceImpl implements ExpenseService {
     @Transactional
     public void deleteExpense(Long expenseId) {
 
-        Expense expense = expenseRepository.findById(expenseId).orElseThrow(() -> new ResourceNotFoundException("Expense not found."));
+        User currentUser = currentUserService.getCurrentUser();
+
+        Expense expense = expenseRepository.findByIdAndUser(expenseId, currentUser).orElseThrow(() -> new ResourceNotFoundException("Expense not found."));
 
         expenseRepository.delete(expense);
 

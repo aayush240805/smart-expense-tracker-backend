@@ -5,12 +5,14 @@ import com.expensetracker.dto.profileResponse.ProfileResponse;
 import com.expensetracker.dto.profileResponse.UpdateProfileRequest;
 import com.expensetracker.dto.response.ApiResponse;
 import com.expensetracker.service.ProfileService;
+import com.expensetracker.validation.ValidationSequence;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -51,6 +53,7 @@ public class ProfileController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid profile details")
     })
     public ResponseEntity<ProfileResponse> updateProfile(
+            @Validated(ValidationSequence.class)
             @RequestBody UpdateProfileRequest request
     ) {
 
@@ -66,10 +69,11 @@ public class ProfileController {
             description = "Change password of the logged-in user's profile."
     )
     @ApiResponses({
-            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "OTP sent successfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "Password changed successfully"),
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<ApiResponse> changePassword(
+            @Validated(ValidationSequence.class)
             @RequestBody ChangePasswordRequest request
     ) {
 

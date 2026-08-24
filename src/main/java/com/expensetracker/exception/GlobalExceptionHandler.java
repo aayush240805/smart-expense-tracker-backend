@@ -1,9 +1,10 @@
 package com.expensetracker.exception;
 
+import com.expensetracker.dto.response.ApiResponse;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.xml.bind.ValidationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -91,6 +92,19 @@ public class GlobalExceptionHandler {
                 .build();
 
         return ResponseEntity.badRequest().body(response);
+    }
+
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse> handleBadCredentials(
+            BadCredentialsException exception) {
+
+        return ResponseEntity
+                .status(HttpStatus.UNAUTHORIZED)
+                .body(ApiResponse.builder()
+                        .success(false)
+                        .message("Invalid email or password.")
+                        .build()
+                );
     }
 
     @ExceptionHandler(Exception.class)

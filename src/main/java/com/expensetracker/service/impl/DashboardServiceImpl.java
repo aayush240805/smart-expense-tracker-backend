@@ -55,6 +55,7 @@ public class DashboardServiceImpl implements DashboardService {
 
         BigDecimal remainingBudget = totalBudget.subtract(totalExpense);
 
+        // Recent 5 Transactions
         List<Expense> recent5ExpenseTransactions = expenseRepository.findTop5ByUserOrderByExpenseDateDesc(currentUser);
         List<Income> recent5IncomeTransactions = incomeRepository.findTop5ByUserOrderByIncomeDateDesc(currentUser);
 
@@ -65,7 +66,7 @@ public class DashboardServiceImpl implements DashboardService {
                         .amount(expense.getAmount())
                         .transactionType(expense.getCategory().getType())
                         .category(expense.getCategory().getName())
-                        .transactionDate(expense.getExpenseDate())
+                        .transactionDate(expense.getCreatedAt())
                         .build())
                 .toList();
 
@@ -76,15 +77,57 @@ public class DashboardServiceImpl implements DashboardService {
                         .amount(income.getAmount())
                         .transactionType(income.getCategory().getType())
                         .category(income.getCategory().getName())
-                        .transactionDate(income.getIncomeDate())
+                        .transactionDate(income.getCreatedAt())
                         .build())
                 .toList();
 
         List<RecentTransactionResponse> recentTransactions =
-                Stream.concat(expenseTransactions.stream(), incomeTransactions.stream())
-                    .sorted(Comparator.comparing(RecentTransactionResponse::getTransactionDate).reversed())
+                Stream.concat(
+                                expenseTransactions.stream(),
+                                incomeTransactions.stream()
+                        )
+                        .sorted(
+                                Comparator.comparing(RecentTransactionResponse::getTransactionDate).reversed()
+                        )
                         .limit(5)
                         .toList();
+
+        // All Transactions
+        List<Expense> allExpenses = expenseRepository.findAllByUserOrderByExpenseDateDesc(currentUser);
+
+        List<Income> allIncomes = incomeRepository.findAllByUserOrderByIncomeDateDesc(currentUser);
+
+        List<RecentTransactionResponse> expenses = allExpenses.stream()
+                .map(expense -> RecentTransactionResponse.builder()
+                        .id(expense.getId())
+                        .title(expense.getTitle())
+                        .amount(expense.getAmount())
+                        .transactionType(expense.getCategory().getType())
+                        .category(expense.getCategory().getName())
+                        .transactionDate(expense.getCreatedAt())
+                        .build())
+                .toList();
+
+        List<RecentTransactionResponse> incomes = allIncomes.stream()
+                .map(income -> RecentTransactionResponse.builder()
+                        .id(income.getId())
+                        .title(income.getTitle())
+                        .amount(income.getAmount())
+                        .transactionType(income.getCategory().getType())
+                        .category(income.getCategory().getName())
+                        .transactionDate(income.getCreatedAt())
+                        .build())
+                .toList();
+
+        List<RecentTransactionResponse> allTransactions = Stream
+                .concat(
+                        expenses.stream(),
+                        incomes.stream()
+                ).sorted(
+                        Comparator.comparing(RecentTransactionResponse::getTransactionDate).reversed()
+                )
+                .toList();
+
 
         List<CategoryExpenseResponse> categoryExpense = expenseRepository.getCategoryWiseExpense(currentUser, month, year);
 
@@ -95,6 +138,7 @@ public class DashboardServiceImpl implements DashboardService {
                 .totalBudget(totalBudget)
                 .remainingBudget(remainingBudget)
                 .recentTransactions(recentTransactions)
+                .allTransactions(allTransactions)
                 .categoryExpenses(categoryExpense)
                 .build();
     }

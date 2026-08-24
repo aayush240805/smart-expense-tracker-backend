@@ -1,8 +1,8 @@
 package com.expensetracker.exception;
 
-public class BadRequestExceptionHandler extends RuntimeException {
+public class BadRequestException extends RuntimeException {
 
-    public BadRequestExceptionHandler(String message) {
+    public BadRequestException(String message) {
         super(message);
     }
 

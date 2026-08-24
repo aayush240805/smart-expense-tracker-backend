@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/reports")
+@RequestMapping("/api/reports")
 @Tag(
         name = "Reports",
         description = "Financial reports and analytics."
@@ -80,7 +80,10 @@ public class ReportController {
             @ApiResponse(responseCode = "200", description = "Report generated successfully"),
             @ApiResponse(responseCode = "401", description = "Unauthorized")
     })
-    public ResponseEntity<List<BudgetReportResponse>> getBudgetReport(@RequestParam Integer month, @RequestParam Integer year) {
+    public ResponseEntity<List<BudgetReportResponse>> getBudgetReport(
+            @RequestParam Integer month,
+            @RequestParam Integer year
+    ) {
 
         List<BudgetReportResponse> response = reportService.getBudgetReport(month, year);
 

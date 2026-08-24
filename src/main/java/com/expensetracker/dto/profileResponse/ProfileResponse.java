@@ -20,6 +20,8 @@ public class ProfileResponse {
 
     private Role role;
 
+    private String profilePicture;
+
     private LocalDateTime createdAt;
 
 }

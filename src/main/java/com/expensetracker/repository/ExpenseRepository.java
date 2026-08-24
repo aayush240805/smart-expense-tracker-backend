@@ -15,6 +15,7 @@ import org.springframework.stereotype.Repository;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpecificationExecutor<Expense> {
@@ -23,13 +24,16 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
     Page<Expense> findAll(Specification specification, Pageable pageable);
 
     // Find expense by id and user
-    Expense findByIdAndUser(Long id, User user);
+    Optional<Expense> findByIdAndUser(Long id, User user);
 
     // Latest expenses
     List<Expense> findByUserOrderByExpenseDateDesc(User user);
 
     // Latest 5 expenses (used for dashboard view)
     List<Expense> findTop5ByUserOrderByExpenseDateDesc(User user);
+
+    // All Latest expenses
+    List<Expense> findAllByUserOrderByExpenseDateDesc(User user);
 
     // Expenses of specific time period
     List<Expense> findByUserAndExpenseDateBetween(User user, LocalDate startDate, LocalDate endDate);
@@ -51,7 +55,7 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
             WHERE e.user = :user
             AND e.category = :category
             AND MONTH(e.expenseDate) = :month
-            AND YEAE(e.expenseDate) = :year
+            AND YEAR(e.expenseDate) = :year
             """)
     BigDecimal getTotalSpentByCategoryAndMonth(User user, Category category, Integer month, Integer year);
 

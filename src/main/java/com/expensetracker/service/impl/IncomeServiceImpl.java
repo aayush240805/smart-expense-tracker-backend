@@ -24,7 +24,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Clock;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -118,7 +120,10 @@ public class IncomeServiceImpl implements IncomeService {
     @Override
     @Transactional(readOnly = true)
     public IncomeResponse getIncomeById(Long incomeId) {
-        Income income = incomeRepository.findById(incomeId).orElseThrow(() -> new ResourceNotFoundException("Income not found."));
+
+        User currentUser = currentUserService.getCurrentUser();
+
+        Income income = incomeRepository.findByIdAndUser(incomeId, currentUser).orElseThrow(() -> new ResourceNotFoundException("Income not found."));
 
         return mapToIncomeResponse(income);
     }
@@ -129,7 +134,7 @@ public class IncomeServiceImpl implements IncomeService {
         User currentUser = currentUserService.getCurrentUser();
 
         // To prevent access income of a user by another user
-        Income income = incomeRepository.findByIdAndUser(incomeId, currentUser);
+        Income income = incomeRepository.findByIdAndUser(incomeId, currentUser).orElseThrow(() -> new ResourceNotFoundException("Income not found."));
 
         Category category = categoryRepository.findById(request.getCategoryId()).orElseThrow(() -> new ResourceNotFoundException("Category not found."));
 
@@ -139,6 +144,7 @@ public class IncomeServiceImpl implements IncomeService {
         income.setIncomeDate(request.getIncomeDate());
         income.setPaymentMethod(request.getPaymentMethod());
         income.setPaymentMethod(request.getPaymentMethod());
+        income.setUpdatedAt(LocalDateTime.now(Clock.systemDefaultZone()));
         // Foreign key
         income.setCategory(category);
 
@@ -152,7 +158,9 @@ public class IncomeServiceImpl implements IncomeService {
     @Transactional
     public void deleteIncome(Long incomeId) {
 
-        Income income = incomeRepository.findById(incomeId).orElseThrow(() -> new ResourceNotFoundException("Income not found."));
+        User currentUser = currentUserService.getCurrentUser();
+
+        Income income = incomeRepository.findByIdAndUser(incomeId, currentUser).orElseThrow(() -> new ResourceNotFoundException("Income not found."));
 
         incomeRepository.delete(income);
 

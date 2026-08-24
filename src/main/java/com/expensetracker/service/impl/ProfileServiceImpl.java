@@ -4,6 +4,8 @@ import com.expensetracker.dto.profileResponse.ChangePasswordRequest;
 import com.expensetracker.dto.profileResponse.ProfileResponse;
 import com.expensetracker.dto.profileResponse.UpdateProfileRequest;
 import com.expensetracker.entity.User;
+import com.expensetracker.exception.BadRequestException;
+import com.expensetracker.exception.ResourceNotFoundException;
 import com.expensetracker.repository.UserRepository;
 import com.expensetracker.service.EmailService;
 import com.expensetracker.service.ProfileService;
@@ -12,6 +14,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -36,6 +40,7 @@ public class ProfileServiceImpl implements ProfileService {
                 .id(currentUser.getId())
                 .fullName(currentUser.getFullName())
                 .email(currentUser.getEmail())
+                .profilePicture(currentUser.getProfilePicture())
                 .role(currentUser.getRole())
                 .createdAt(currentUser.getCreatedAt())
                 .build();
@@ -85,4 +90,5 @@ public class ProfileServiceImpl implements ProfileService {
         emailService.sendPasswordChangedEmail(savedUser);
 
     }
+
 }

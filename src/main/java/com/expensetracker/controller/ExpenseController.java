@@ -5,19 +5,18 @@ import com.expensetracker.dto.response.ApiResponse;
 import com.expensetracker.dto.response.ExpenseResponse;
 import com.expensetracker.dto.response.PageResponse;
 import com.expensetracker.service.ExpenseService;
+import com.expensetracker.validation.ValidationSequence;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/expenses")
@@ -42,7 +41,8 @@ public class ExpenseController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public ResponseEntity<ExpenseResponse> addExpense(
-            @Valid @RequestBody ExpenseRequest request
+            @Validated(ValidationSequence.class)
+            @RequestBody ExpenseRequest request
     ) {
 
         ExpenseResponse response = expenseService.addExpense(request);
@@ -115,7 +115,8 @@ public class ExpenseController {
     })
     public ResponseEntity<ExpenseResponse> updateExpense(
             @PathVariable Long expenseId,
-            @Valid @RequestBody ExpenseRequest request
+            @Validated(ValidationSequence.class)
+            @RequestBody ExpenseRequest request
     ) {
 
         ExpenseResponse response = expenseService.updateExpense(expenseId, request);

@@ -25,6 +25,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.ResourceAccessException;
 import java.math.BigDecimal;
+import java.time.Clock;
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
@@ -74,7 +76,7 @@ public class BudgetServiceImpl implements BudgetService {
         budget.setUser(currentUser);
 
         budgetRepository.findByUserAndCategoryAndMonthAndYear(currentUser, category, request.getMonth(), request.getYear()).ifPresent( b -> {
-            throw new RuntimeException(
+            throw new DuplicateResourceException(
                     "Budget already exists for this category and month."
             );
         });
@@ -147,6 +149,7 @@ public class BudgetServiceImpl implements BudgetService {
         budget.setMonthlyLimit(request.getMonthlyLimit());
         budget.setMonth(request.getMonth());
         budget.setYear(request.getYear());
+        budget.setUpdatedAt(LocalDateTime.now(Clock.systemDefaultZone()));
 
         // Foreign key
         budget.setCategory(category);

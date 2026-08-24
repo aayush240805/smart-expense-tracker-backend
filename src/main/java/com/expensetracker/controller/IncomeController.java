@@ -5,19 +5,18 @@ import com.expensetracker.dto.response.ApiResponse;
 import com.expensetracker.dto.response.IncomeResponse;
 import com.expensetracker.dto.response.PageResponse;
 import com.expensetracker.service.IncomeService;
+import com.expensetracker.validation.ValidationSequence;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/incomes")
@@ -42,7 +41,8 @@ public class IncomeController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Unauthorized")
     })
     public ResponseEntity<IncomeResponse> addIncome(
-            @Valid @RequestBody IncomeRequest request
+            @Validated(ValidationSequence.class)
+            @RequestBody IncomeRequest request
     ) {
 
         IncomeResponse response = incomeService.addIncome(request);
@@ -115,7 +115,9 @@ public class IncomeController {
     })
     public ResponseEntity<IncomeResponse> updateIncome(
             @PathVariable Long incomeId,
-            @Valid @RequestBody IncomeRequest request
+
+            @Validated(ValidationSequence.class)
+            @RequestBody IncomeRequest request
     ) {
 
         IncomeResponse response = incomeService.updateIncome(incomeId, request);

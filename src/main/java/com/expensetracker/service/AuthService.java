@@ -12,4 +12,6 @@ public interface AuthService {
 
     LoginResponse login(LoginRequest request);
 
+    void deleteUser();
+
 }

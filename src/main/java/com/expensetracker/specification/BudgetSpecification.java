@@ -29,7 +29,7 @@ public class BudgetSpecification {
                     )
             );
 
-            if (criteriaBuilder != null) {
+            if (categoryId != null) {
                 predicates.add(
                         criteriaBuilder.equal(
                                 root.get("category").get("id"),
@@ -50,7 +50,7 @@ public class BudgetSpecification {
             if (year != null) {
                 predicates.add(
                         criteriaBuilder.equal(
-                                root.get("month"),
+                                root.get("year"),
                                 year
                         )
                 );

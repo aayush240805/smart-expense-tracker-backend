@@ -1,10 +1,10 @@
 package com.expensetracker.entity;
 
+import com.expensetracker.enums.AuthProvider;
 import com.expensetracker.enums.Role;
 import jakarta.persistence.*;
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -28,22 +28,35 @@ public class User extends BaseEntity {
     @Column(nullable = false, unique = true, length = 150)
     private String email;
 
-    @Column(nullable = false)
+    // Can be null
+    @Column
+    private String profilePicture;
+
+    // Can be null for Google user
+    @Column
     private String password;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    @Column
+    private AuthProvider provider;
+
 
     @Override
     @PrePersist
     public void prePersist() {
-        if(role == null) {
+
+        if (role == null) {
             this.role = Role.USER;
         }
-    }
 
+        if (provider == null) {
+            this.provider = AuthProvider.APPLICATION;
+        }
+    }
 
     @OneToMany(
             mappedBy = "user",

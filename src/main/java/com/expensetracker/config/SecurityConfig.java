@@ -3,6 +3,9 @@ package com.expensetracker.config;
 import com.expensetracker.security.CustomUserDetailsService;
 import com.expensetracker.security.JwtAuthenticationEntryPoint;
 import com.expensetracker.security.JwtAuthenticationFilter;
+import com.expensetracker.security.OAuth2.CustomOAuth2UserService;
+import com.expensetracker.security.OAuth2.OAuth2AuthenticationFailureHandler;
+import com.expensetracker.security.OAuth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,8 +28,17 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 public class SecurityConfig {
 
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
+
     private final JwtAuthenticationEntryPoint jwtAuthenticationEntryPoint;
+
     private final CustomUserDetailsService userDetailsService;
+
+    private final CustomOAuth2UserService customOAuth2UserService;
+
+    private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
+
+    private final OAuth2AuthenticationFailureHandler oAuth2AuthenticationFailureHandler;
+
 
     @Bean
     public PasswordEncoder passwordEncoder() {
@@ -64,20 +76,41 @@ public class SecurityConfig {
                 .cors(cors -> {
                 })
 
-                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session ->
+                        session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)
+                )
 
-                .exceptionHandling(exception -> exception.authenticationEntryPoint(jwtAuthenticationEntryPoint))
+                .exceptionHandling(exception ->
+                        exception.authenticationEntryPoint(jwtAuthenticationEntryPoint)
+                )
 
                 .authorizeHttpRequests(auth -> auth
 
-                        .requestMatchers("/api/auth/**", "/swagger-ui/**", "/v3/api-docs/**", "/swagger-ui.html").permitAll()
+                        .requestMatchers(
+                                "/api/auth/**",
+                                "/oauth2/**",
+                                "/login/**",
+                                "/swagger-ui/**",
+                                "/v3/api-docs/**",
+                                "/swagger-ui.html"
+                        ).permitAll()
 
                         .anyRequest().authenticated())
 
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint(userInfo ->
+                                userInfo.userService(customOAuth2UserService)
+                        )
+                        .successHandler(oAuth2AuthenticationSuccessHandler)
+                        .failureHandler(oAuth2AuthenticationFailureHandler)
+                )
 
                 .authenticationProvider(authenticationProvider())
 
-                .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+                .addFilterBefore(
+                        jwtAuthenticationFilter,
+                        UsernamePasswordAuthenticationFilter.class
+                );
 
         return http.build();
     }

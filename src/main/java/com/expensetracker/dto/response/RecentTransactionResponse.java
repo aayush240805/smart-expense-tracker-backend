@@ -5,6 +5,7 @@ import lombok.*;
 
 import java.math.BigDecimal;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @Setter
@@ -23,6 +24,6 @@ public class RecentTransactionResponse {
 
     private String category;
 
-    private LocalDate transactionDate;
+    private LocalDateTime transactionDate;
 
 }

@@ -5,6 +5,7 @@ import com.expensetracker.dto.response.ApiResponse;
 import com.expensetracker.dto.response.BudgetResponse;
 import com.expensetracker.dto.response.PageResponse;
 import com.expensetracker.service.BudgetService;
+import com.expensetracker.validation.ValidationSequence;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -13,6 +14,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -37,7 +39,8 @@ public class BudgetController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Budget already exists")
     })
     public ResponseEntity<BudgetResponse> addBudget(
-            @Valid @RequestBody BudgetRequest request
+            @Validated(ValidationSequence.class)
+            @RequestBody BudgetRequest request
     ) {
 
         BudgetResponse response = budgetService.addBudget(request);
@@ -76,7 +79,7 @@ public class BudgetController {
         return ResponseEntity.ok(responses);
     }
 
-    @GetMapping("/id/{id}")
+    @GetMapping("/{budgetId}")
     @Operation(
             summary = "Get Budget By ID",
             description = "Returns a budget using its ID."
@@ -86,15 +89,15 @@ public class BudgetController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Budget not found")
     })
     public ResponseEntity<BudgetResponse> getBudgetById(
-            @PathVariable Long id
+            @PathVariable Long budgetId
     ) {
 
-        BudgetResponse response = budgetService.getBudgetById(id);
+        BudgetResponse response = budgetService.getBudgetById(budgetId);
 
         return ResponseEntity.ok(response);
     }
 
-    @PutMapping("/id/{id}")
+    @PutMapping("/{budgetId}")
     @Operation(
             summary = "Update Budget",
             description = "Updates an existing monthly budget."
@@ -104,16 +107,17 @@ public class BudgetController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Budget not found")
     })
     public ResponseEntity<BudgetResponse> updateBudget(
-            @PathVariable Long id,
-            @Valid @RequestBody BudgetRequest request
+            @PathVariable Long budgetId,
+            @Validated(ValidationSequence.class)
+            @RequestBody BudgetRequest request
     ) {
 
-        BudgetResponse response = budgetService.updateBudget(id, request);
+        BudgetResponse response = budgetService.updateBudget(budgetId, request);
 
         return ResponseEntity.ok(response);
     }
 
-    @DeleteMapping("/id/{id}")
+    @DeleteMapping("/{budgetId}")
     @Operation(
             summary = "Delete Budget",
             description = "Deletes a budget."
@@ -123,10 +127,10 @@ public class BudgetController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "Budget not found")
     })
     public ResponseEntity<ApiResponse> deleteBudget(
-            @PathVariable Long id
+            @PathVariable Long budgetId
     ) {
 
-        budgetService.deleteBudget(id);
+        budgetService.deleteBudget(budgetId);
 
         return ResponseEntity.ok(new ApiResponse(true, "Budget deleted successfully."));
     }

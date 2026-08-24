@@ -8,18 +8,16 @@ import com.expensetracker.dto.response.ApiResponse;
 import com.expensetracker.dto.response.LoginResponse;
 import com.expensetracker.service.AuthService;
 import com.expensetracker.service.OtpService;
+import com.expensetracker.validation.ValidationSequence;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.coyote.BadRequestException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -44,7 +42,8 @@ public class AuthController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid request or email already exists")
     })
     public ResponseEntity<ApiResponse> register(
-            @Valid @RequestBody RegisterRequest request
+            @Validated(ValidationSequence.class)
+            @RequestBody RegisterRequest request
     ) throws BadRequestException {
 
         ApiResponse response = authService.register(request);
@@ -62,7 +61,8 @@ public class AuthController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "401", description = "Invalid email or password")
     })
     public ResponseEntity<LoginResponse> login(
-            @Valid @RequestBody LoginRequest request
+            @Validated(ValidationSequence.class)
+            @RequestBody LoginRequest request
     ) {
         LoginResponse response = authService.login(request);
 
@@ -79,13 +79,15 @@ public class AuthController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "User not found")
     })
     public ResponseEntity<ApiResponse> forgetPassword(
-            @Valid @RequestBody ForgotPasswordRequest request
+            @Validated(ValidationSequence.class)
+            @RequestBody ForgotPasswordRequest request
     ) {
 
         otpService.forgotPassword(request);
 
         return ResponseEntity.ok(
                 ApiResponse.builder()
+                        .success(true)
                         .message("OTP sent via email.")
                         .build()
         );
@@ -101,16 +103,36 @@ public class AuthController {
             @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "400", description = "Invalid or expired OTP")
     })
     public ResponseEntity<ApiResponse> resetPassword(
-            @Valid @RequestBody ResetPasswordRequest request
+            @Validated(ValidationSequence.class)
+            @RequestBody ResetPasswordRequest request
     ) {
 
         otpService.resetPassword(request);
 
         return ResponseEntity.ok(
                 ApiResponse.builder()
+                        .success(true)
                         .message("Password reset successfully.")
                         .build()
         );
+    }
+
+
+    @PostMapping("/delete-user")
+    @Operation(
+            summary = "Delete User",
+            description = "Delete logged-in user."
+    )
+    @ApiResponses({
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "200", description = "User deleted successfully"),
+            @io.swagger.v3.oas.annotations.responses.ApiResponse(responseCode = "404", description = "User not found")
+    })
+    public ResponseEntity<ApiResponse> deleteUser() {
+
+        authService.deleteUser();
+
+        return ResponseEntity.ok(new ApiResponse(true, "Account deleted successfully."));
+
     }
 
 }
