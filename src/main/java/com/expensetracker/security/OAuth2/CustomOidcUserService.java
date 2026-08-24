@@ -5,10 +5,13 @@ import com.expensetracker.enums.AuthProvider;
 import com.expensetracker.enums.Role;
 import com.expensetracker.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserRequest;
+import org.springframework.security.oauth2.client.oidc.userinfo.OidcUserService;
 import org.springframework.security.oauth2.client.userinfo.DefaultOAuth2UserService;
 import org.springframework.security.oauth2.client.userinfo.OAuth2UserRequest;
 import org.springframework.security.oauth2.core.OAuth2AuthenticationException;
 import org.springframework.security.oauth2.core.OAuth2Error;
+import org.springframework.security.oauth2.core.oidc.user.OidcUser;
 import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
@@ -17,20 +20,22 @@ import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
-public class CustomOAuth2UserService extends DefaultOAuth2UserService {
+public class CustomOidcUserService extends OidcUserService {
 
     private final UserRepository userRepository;
 
     @Override
-    public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
+    public OidcUser loadUser(
+            OidcUserRequest oidcUserRequest
+    ) throws OAuth2AuthenticationException {
 
-        OAuth2User oAuth2User = super.loadUser(userRequest);
+        OidcUser oidcUser = super.loadUser(oidcUserRequest);
 
-        String email = oAuth2User.getAttribute("email");
+        String email = oidcUser.getAttribute("email");
 
-        String fullName = oAuth2User.getAttribute("name");
+        String fullName = oidcUser.getAttribute("name");
 
-        String picture = oAuth2User.getAttribute("picture");
+        String picture = oidcUser.getAttribute("picture");
 
         if (email == null || email.isBlank()) {
 
@@ -63,7 +68,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
 
         });
 
-        return new CustomOAuth2UserPrincipal(user, oAuth2User.getAttributes());
+        return new CustomOidcUserPrincipal(user, oidcUser);
 
     }
 

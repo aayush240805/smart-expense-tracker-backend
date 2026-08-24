@@ -3,7 +3,7 @@ package com.expensetracker.config;
 import com.expensetracker.security.CustomUserDetailsService;
 import com.expensetracker.security.JwtAuthenticationEntryPoint;
 import com.expensetracker.security.JwtAuthenticationFilter;
-import com.expensetracker.security.OAuth2.CustomOAuth2UserService;
+import com.expensetracker.security.OAuth2.CustomOidcUserService;
 import com.expensetracker.security.OAuth2.OAuth2AuthenticationFailureHandler;
 import com.expensetracker.security.OAuth2.OAuth2AuthenticationSuccessHandler;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +33,7 @@ public class SecurityConfig {
 
     private final CustomUserDetailsService userDetailsService;
 
-    private final CustomOAuth2UserService customOAuth2UserService;
+    private final CustomOidcUserService customOidcUserService;
 
     private final OAuth2AuthenticationSuccessHandler oAuth2AuthenticationSuccessHandler;
 
@@ -99,7 +99,7 @@ public class SecurityConfig {
 
                 .oauth2Login(oauth2 -> oauth2
                         .userInfoEndpoint(userInfo ->
-                                userInfo.userService(customOAuth2UserService)
+                                userInfo.oidcUserService(customOidcUserService)
                         )
                         .successHandler(oAuth2AuthenticationSuccessHandler)
                         .failureHandler(oAuth2AuthenticationFailureHandler)

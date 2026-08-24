@@ -27,15 +27,15 @@ public class  OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthentication
             Authentication authentication
     ) throws IOException {
 
-        CustomOAuth2UserPrincipal oAuth2UserPrincipal = (CustomOAuth2UserPrincipal) authentication.getPrincipal();
+        CustomOidcUserPrincipal oidcUserPrincipal = (CustomOidcUserPrincipal) authentication.getPrincipal();
 
-        User user = oAuth2UserPrincipal.getUser();
+        User user = oidcUserPrincipal.getUser();
 
         UserPrincipal userPrincipal = new UserPrincipal(user);
 
         String token = jwtService.generateToken(userPrincipal);
 
-        String redirectUrl = "http://10.113.244.93:5173/oauth2/redirect?token="
+        String redirectUrl = "http://localhost:5173/oauth2/redirect?token="
                 + URLEncoder.encode(token, StandardCharsets.UTF_8);
 
         getRedirectStrategy().sendRedirect(
