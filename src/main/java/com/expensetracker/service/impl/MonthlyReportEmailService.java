@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.time.YearMonth;
+import java.time.ZoneId;
 import java.util.List;
 
 @Service
@@ -35,7 +36,7 @@ public class MonthlyReportEmailService implements com.expensetracker.service.Mon
     @Transactional
     public void sendMonthlyReportEmail() {
 
-        YearMonth previousMonth = YearMonth.now().minusMonths(1);
+        YearMonth previousMonth = YearMonth.now(ZoneId.of("Asia/Kolkata")).minusMonths(1);
 
         int month = previousMonth.getMonthValue();
 

@@ -9,11 +9,13 @@ import lombok.Setter;
 
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Getter
 @Setter
 @MappedSuperclass
 public class BaseEntity {
+
     @Column(name = "created_at", nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -21,16 +23,17 @@ public class BaseEntity {
     private LocalDateTime updatedAt;
 
 
+    private static final ZoneId INDIA_ZONE = ZoneId.of("Asia/Kolkata");
 
     @PrePersist
     public void prePersist() {
-        this.createdAt = LocalDateTime.now(Clock.systemDefaultZone());
-        this.updatedAt = LocalDateTime.now(Clock.systemDefaultZone());
+        this.createdAt = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
+        this.updatedAt = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
     }
 
     @PreUpdate
     public void preUpdate() {
-        this.updatedAt = LocalDateTime.now(Clock.systemDefaultZone());
+        this.updatedAt = LocalDateTime.now(ZoneId.of("Asia/Kolkata"));
     }
 
 }

@@ -5,36 +5,54 @@ import com.expensetracker.dto.reportResponse.CategoryExpenseResponse;
 import com.expensetracker.dto.response.MonthlyReportEmailResponse;
 import com.expensetracker.entity.User;
 import com.expensetracker.service.EmailService;
+import com.resend.Resend;
+import com.resend.core.exception.ResendException;
+import com.resend.services.emails.model.CreateEmailOptions;
+import com.resend.services.emails.model.CreateEmailResponse;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.time.Month;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class EmailServiceImpl implements EmailService {
 
-    private final JavaMailSender mailSender;
+    private final Resend resend;
 
-    @Value("${spring.mail.username}")
+    @Value("${resend.from-email}")
     private String fromEmail;
 
 
     @Override
     public void sendSimpleEmail(String to, String subject, String body) {
 
-        SimpleMailMessage message = new SimpleMailMessage();
+        CreateEmailOptions message = CreateEmailOptions.builder()
+                .from(fromEmail)
+                .to(to)
+                .subject(subject)
+                .text(body)
+                .build();
 
-        message.setFrom(fromEmail);
-        message.setTo(to);
-        message.setSubject(subject);
-        message.setText(body);
+        try {
 
-        mailSender.send(message);
+            CreateEmailResponse response =
+                    resend.emails().send(message);
+
+            log.info("Email sent successfully. ID: {}", response.getId());
+
+        } catch (ResendException e) {
+
+            throw new RuntimeException(
+                    "Failed to send email: "
+                            + e.getMessage(),
+                    e
+            );
+        }
 
     }
 

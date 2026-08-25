@@ -22,9 +22,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -140,7 +140,7 @@ public class IncomeServiceImpl implements IncomeService {
         income.setIncomeDate(request.getIncomeDate());
         income.setPaymentMethod(request.getPaymentMethod());
         income.setPaymentMethod(request.getPaymentMethod());
-        income.setUpdatedAt(LocalDateTime.now(Clock.systemDefaultZone()));
+        income.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Kolkata")));
         // Foreign key
         income.setCategory(category);
 
