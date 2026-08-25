@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.security.SecureRandom;
 import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 
 @Service
@@ -57,7 +58,7 @@ public class OtpServiceImpl implements OtpService {
         // Save OTP
         Otp otp = Otp.builder()
                 .otp(generatedOtp)
-                .expiryTime(LocalDateTime.now(Clock.systemDefaultZone()).plusMinutes(10))
+                .expiryTime(LocalDateTime.now(ZoneId.of("Asia/Kolkata")).plusMinutes(10))
                 .verified(false)
                 .user(user)
                 .build();
@@ -80,7 +81,7 @@ public class OtpServiceImpl implements OtpService {
         Otp otp = otpRepository.findTopByUserAndOtpAndVerifiedFalseOrderByCreatedAtDesc(user, request.getOtp()).orElseThrow(() -> new IllegalArgumentException("Invalid OTP."));
 
         // Check expiry
-        if (otp.getExpiryTime().isBefore(LocalDateTime.now(Clock.systemDefaultZone()))) {
+        if (otp.getExpiryTime().isBefore(LocalDateTime.now(ZoneId.of("Asia/Kolkata")))) {
 
             throw new IllegalArgumentException("OTP has expired.");
 

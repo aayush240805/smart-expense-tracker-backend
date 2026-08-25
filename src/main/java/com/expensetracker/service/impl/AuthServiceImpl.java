@@ -23,8 +23,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Optional;
 
 
@@ -61,8 +61,8 @@ public class AuthServiceImpl implements AuthService {
         newUser.setPassword(passwordEncoder.encode(request.getPassword()));
         newUser.setRole(Role.USER);
         newUser.setProvider(AuthProvider.APPLICATION);
-        newUser.setCreatedAt(LocalDateTime.now(Clock.systemDefaultZone()));
-        newUser.setUpdatedAt(LocalDateTime.now(Clock.systemDefaultZone()));
+        newUser.setCreatedAt(LocalDateTime.now(ZoneId.of("Asia/Kolkata")));
+        newUser.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Kolkata")));
 
         User savedUser = userRepository.save(newUser);
 

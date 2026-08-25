@@ -22,9 +22,9 @@ import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 
 @Service
 @RequiredArgsConstructor
@@ -143,7 +143,7 @@ public class ExpenseServiceImpl implements ExpenseService {
         expense.setDescription(request.getDescription());
         expense.setExpenseDate(request.getExpenseDate());
         expense.setPaymentMethod(request.getPaymentMethod());
-        expense.setUpdatedAt(LocalDateTime.now(Clock.systemDefaultZone()));
+        expense.setUpdatedAt(LocalDateTime.now(ZoneId.of("Asia/Kolkata")));
 
         // Foreign key
         expense.setCategory(category);
