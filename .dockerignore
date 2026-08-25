@@ -1,10 +1,8 @@
 .git
-.gitignore
+.github
 .idea
 .vscode
 .env
 *.iml
 *.log
-
-src
-README.md
+target
