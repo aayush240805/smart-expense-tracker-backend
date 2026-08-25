@@ -6,6 +6,7 @@ import com.expensetracker.security.UserPrincipal;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
@@ -19,6 +20,9 @@ import java.nio.charset.StandardCharsets;
 public class  OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
     private final JwtService jwtService;
+
+    @Value("${app.OAuth2-redirect-success-url}")
+    private String redirectSuccessUrl;
 
     @Override
     public void onAuthenticationSuccess(
@@ -35,7 +39,7 @@ public class  OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthentication
 
         String token = jwtService.generateToken(userPrincipal);
 
-        String redirectUrl = "http://localhost:5173/oauth2/redirect?token="
+        String redirectUrl = redirectSuccessUrl
                 + URLEncoder.encode(token, StandardCharsets.UTF_8);
 
         getRedirectStrategy().sendRedirect(

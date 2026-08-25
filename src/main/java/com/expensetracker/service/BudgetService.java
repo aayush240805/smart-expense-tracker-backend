@@ -3,7 +3,6 @@ package com.expensetracker.service;
 import com.expensetracker.dto.request.BudgetRequest;
 import com.expensetracker.dto.response.BudgetResponse;
 import com.expensetracker.dto.response.PageResponse;
-import org.springframework.data.domain.Page;
 
 public interface BudgetService {
 

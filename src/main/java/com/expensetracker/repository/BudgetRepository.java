@@ -21,14 +21,8 @@ public interface BudgetRepository extends JpaRepository<Budget, Long>, JpaSpecif
     // User's all budgets
     Page<Budget> findAll(Specification specification, Pageable pageable);
 
-    // Get All Budgets of Current User
-    List<Budget> findByUserOrderByYearDescMonthDesc(User user);
-
     // Find budget by id and user
     Optional<Budget> findByIdAndUser(Long id, User user);
-
-    // Is user's budget of specific month & year already exists
-    boolean existsByUserAndMonthAndYear(User user, Integer month, Integer year);
 
     // Find Budget by User + Category + Month + Year
     Optional<Budget> findByUserAndCategoryAndMonthAndYear(User user, Category category, Integer month, Integer year);

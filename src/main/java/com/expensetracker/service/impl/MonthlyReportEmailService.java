@@ -4,7 +4,6 @@ import com.expensetracker.dto.reportResponse.BudgetReportResponse;
 import com.expensetracker.dto.reportResponse.CategoryExpenseResponse;
 import com.expensetracker.dto.response.MonthlyReportEmailResponse;
 import com.expensetracker.entity.User;
-import com.expensetracker.repository.BudgetRepository;
 import com.expensetracker.repository.ExpenseRepository;
 import com.expensetracker.repository.IncomeRepository;
 import com.expensetracker.repository.UserRepository;
@@ -15,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
-import java.time.Month;
 import java.time.YearMonth;
 import java.util.List;
 

@@ -4,6 +4,10 @@ import com.expensetracker.dto.response.PageResponse;
 import org.springframework.data.domain.Page;
 
 public class PaginationUtil {
+    private PaginationUtil() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static <T> PageResponse<T> toPageResponse(Page<T> page) {
 

@@ -17,7 +17,7 @@ public class CurrentUserService {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         if (authentication != null && authentication.getPrincipal() instanceof UserPrincipal userPrincipal) {
-            return userPrincipal.getUser();
+            return userPrincipal.user();
         }
 
         // Throws a clean 401 Unauthorized error instead of crashing with a ClassCastException

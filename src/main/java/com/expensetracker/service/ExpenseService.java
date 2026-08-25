@@ -3,7 +3,6 @@ package com.expensetracker.service;
 import com.expensetracker.dto.request.ExpenseRequest;
 import com.expensetracker.dto.response.ExpenseResponse;
 import com.expensetracker.dto.response.PageResponse;
-import org.springframework.data.domain.Page;
 
 import java.time.LocalDate;
 

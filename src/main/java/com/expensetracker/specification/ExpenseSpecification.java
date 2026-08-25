@@ -10,6 +10,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class ExpenseSpecification {
+    private ExpenseSpecification() {
+        /* This utility class should not be instantiated */
+    }
+
     public static Specification<Expense> expenseSpecification(
             User user,
             String keyword,

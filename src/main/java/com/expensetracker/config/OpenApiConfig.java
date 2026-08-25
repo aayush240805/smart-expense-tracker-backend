@@ -24,7 +24,7 @@ public class OpenApiConfig {
                         .version("1.0.0")
                         .description("REST APIs for Smart Expense Tracker")
                         .contact(new Contact()
-                                .name("Aayush Sharma")
+                                .name("fullName")
                                 .email("your-email@gmail.com")))
 
                 .addSecurityItem(

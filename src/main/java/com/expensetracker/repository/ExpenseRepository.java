@@ -13,7 +13,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,19 +25,11 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
     // Find expense by id and user
     Optional<Expense> findByIdAndUser(Long id, User user);
 
-    // Latest expenses
-    List<Expense> findByUserOrderByExpenseDateDesc(User user);
-
     // Latest 5 expenses (used for dashboard view)
     List<Expense> findTop5ByUserOrderByExpenseDateDesc(User user);
 
     // All Latest expenses
     List<Expense> findAllByUserOrderByExpenseDateDesc(User user);
-
-    // Expenses of specific time period
-    List<Expense> findByUserAndExpenseDateBetween(User user, LocalDate startDate, LocalDate endDate);
-
-    List<Expense> findByUserAndCategoryId(User user, Long categoryId);
 
     @Query("""
             SELECT COALESCE(SUM(e.amount), 0)
@@ -46,8 +37,6 @@ public interface ExpenseRepository extends JpaRepository<Expense, Long>, JpaSpec
             WHERE e.user = :user
             """)
     BigDecimal getTotalExpense(User user);
-
-    Long countByUser(User user);
 
     @Query("""
             SELECT COALESCE(sum(e.amount), 0)

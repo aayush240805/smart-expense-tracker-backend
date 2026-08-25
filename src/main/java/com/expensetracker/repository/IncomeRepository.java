@@ -1,6 +1,5 @@
 package com.expensetracker.repository;
 
-import com.expensetracker.entity.Expense;
 import com.expensetracker.entity.Income;
 import com.expensetracker.entity.User;
 import org.springframework.data.domain.Page;
@@ -12,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.math.BigDecimal;
-import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,20 +23,11 @@ public interface IncomeRepository extends JpaRepository<Income, Long>, JpaSpecif
     // Find income by id and user
     Optional<Income> findByIdAndUser(Long id, User user);
 
-    // Latest incomes
-    List<Income> findByUserOrderByIncomeDateDesc(User user);
-
     // Latest 5 incomes (used for dashboard view)
     List<Income> findTop5ByUserOrderByIncomeDateDesc(User user);
 
     // All Latest incomes
     List<Income> findAllByUserOrderByIncomeDateDesc(User user);
-
-    // Incomes of specific time period
-    List<Income> findByUserAndIncomeDateBetween(User user, LocalDate startDate, LocalDate endDate);
-
-    // User's all incomes of specific category
-    List<Income> findByUserAndCategoryId(User user, Long categoryId);
 
     @Query("""
             SELECT COALESCE(SUM(i.amount), 0)
@@ -46,8 +35,6 @@ public interface IncomeRepository extends JpaRepository<Income, Long>, JpaSpecif
             WHERE i.user = :user
             """)
     BigDecimal getTotalIncome(User user);
-
-    Long countByUser(User user);
 
     @Query("""
             SELECT COALESCE(SUM(i.amount), 0)

@@ -4,14 +4,12 @@ import com.expensetracker.dto.request.IncomeRequest;
 import com.expensetracker.dto.response.IncomeResponse;
 import com.expensetracker.dto.response.PageResponse;
 import com.expensetracker.entity.Category;
-import com.expensetracker.entity.Expense;
 import com.expensetracker.entity.Income;
 import com.expensetracker.entity.User;
 import com.expensetracker.exception.ResourceNotFoundException;
 import com.expensetracker.repository.CategoryRepository;
 import com.expensetracker.repository.IncomeRepository;
 import com.expensetracker.service.IncomeService;
-import com.expensetracker.specification.ExpenseSpecification;
 import com.expensetracker.specification.IncomeSpecification;
 import com.expensetracker.util.CurrentUserService;
 import com.expensetracker.util.PaginationUtil;
@@ -27,8 +25,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Clock;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor

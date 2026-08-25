@@ -1,6 +1,5 @@
 package com.expensetracker.service;
 
-import com.expensetracker.dto.reportResponse.MonthlyReportResponse;
 import com.expensetracker.dto.response.MonthlyReportEmailResponse;
 import com.expensetracker.entity.User;
 

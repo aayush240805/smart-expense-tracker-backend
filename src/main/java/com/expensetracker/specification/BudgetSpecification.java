@@ -9,6 +9,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class BudgetSpecification {
+    private BudgetSpecification() {
+        /* This utility class should not be instantiated */
+    }
+
 
     public static Specification<Budget> budgetSpecification(
             User user,
