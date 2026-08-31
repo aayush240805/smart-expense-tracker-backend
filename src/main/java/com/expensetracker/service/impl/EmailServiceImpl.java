@@ -87,6 +87,36 @@ public class EmailServiceImpl implements EmailService {
 
     @Override
     @Async
+    public void sendGoogleLoginEmail(User user) {
+
+        String subject = "Welcome to Smart Expense Tracker";
+
+        String body = """
+            Hello %s,
+
+            Welcome to Smart Expense Tracker!
+
+            You have successfully logged in to Smart Expense Tracker using Google.
+
+            We are excited to help you manage your income, expenses, and budgets.
+
+            Happy Saving!
+
+            Regards,
+            Smart Expense Tracker Team
+            """.formatted(user.getFullName());
+
+        sendSimpleEmail(
+                user.getEmail(),
+                subject,
+                body
+        );
+
+    }
+
+
+    @Override
+    @Async
     public void sendPasswordChangedEmail(User user) {
 
         String subject = "Password Changed Successfully";

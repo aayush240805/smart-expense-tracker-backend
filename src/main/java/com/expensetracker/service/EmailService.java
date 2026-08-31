@@ -13,6 +13,8 @@ public interface EmailService {
 
     void sendWelcomeEmail(User user);
 
+    void sendGoogleLoginEmail(User user);
+
     void sendPasswordChangedEmail(User user);
 
     void sendOtpEmail(User user, String otp);
