@@ -38,10 +38,8 @@ public class  OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthentication
 
         User user = oidcUserPrincipal.getUser();
 
-        if (user.getCreatedAt() ==null){
-            // Send login email
-            emailService.sendGoogleLoginEmail(user);
-        }
+        // Send login email
+        emailService.sendGoogleLoginEmail(user);
 
         UserPrincipal userPrincipal = new UserPrincipal(user);
 
