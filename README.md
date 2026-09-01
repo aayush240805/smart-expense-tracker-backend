@@ -213,4 +213,170 @@ Spring Security
 
 ## 📂 Project Structure
 
-
+smart-expense-tracker-backend/
+│
+├── src/
+│   ├── main/
+│   │   ├── java/
+│   │   │   └── com/
+│   │   │       └── expensetracker/
+│   │   │
+│   │   │       ├── SmartExpenseTrackerApplication.java
+│   │   │       │
+│   │   │       ├── config/
+│   │   │       │   ├── CorsConfig.java
+│   │   │       │   ├── DataInitializer.java
+│   │   │       │   ├── OpenApiConfig.java
+│   │   │       │   ├── ResendConfig.java
+│   │   │       │   └── SecurityConfig.java
+│   │   │       │
+│   │   │       ├── controller/
+│   │   │       │   ├── AuthController.java
+│   │   │       │   ├── BudgetController.java
+│   │   │       │   ├── CategoryController.java
+│   │   │       │   ├── DashboardController.java
+│   │   │       │   ├── ExpenseController.java
+│   │   │       │   ├── IncomeController.java
+│   │   │       │   ├── ProfileController.java
+│   │   │       │   └── ReportController.java
+│   │   │       │
+│   │   │       ├── dto/
+│   │   │       │   ├── request/
+│   │   │       │   │   ├── BudgetRequest.java
+│   │   │       │   │   ├── ExpenseRequest.java
+│   │   │       │   │   ├── IncomeRequest.java
+│   │   │       │   │   ├── LoginRequest.java
+│   │   │       │   │   └── RegisterRequest.java
+│   │   │       │   │
+│   │   │       │   ├── response/
+│   │   │       │   │   ├── ApiResponse.java
+│   │   │       │   │   ├── BudgetResponse.java
+│   │   │       │   │   ├── CategoryResponse.java
+│   │   │       │   │   ├── DashboardResponse.java
+│   │   │       │   │   ├── ExpenseResponse.java
+│   │   │       │   │   ├── IncomeResponse.java
+│   │   │       │   │   ├── LoginResponse.java
+│   │   │       │   │   ├── MonthlyReportEmailResponse.java
+│   │   │       │   │   ├── PageResponse.java
+│   │   │       │   │   └── RecentTransactionResponse.java
+│   │   │       │   │
+│   │   │       │   ├── otpRequest/
+│   │   │       │   │   ├── ForgotPasswordRequest.java
+│   │   │       │   │   └── ResetPasswordRequest.java
+│   │   │       │   │
+│   │   │       │   ├── profileResponse/
+│   │   │       │   │   ├── ChangePasswordRequest.java
+│   │   │       │   │   ├── ProfileResponse.java
+│   │   │       │   │   └── UpdateProfileRequest.java
+│   │   │       │   │
+│   │   │       │   └── reportResponse/
+│   │   │       │       ├── BudgetReportResponse.java
+│   │   │       │       ├── CategoryExpenseResponse.java
+│   │   │       │       └── MonthlyReportResponse.java
+│   │   │       │
+│   │   │       ├── entity/
+│   │   │       │   ├── BaseEntity.java
+│   │   │       │   ├── User.java
+│   │   │       │   ├── Expense.java
+│   │   │       │   ├── Income.java
+│   │   │       │   ├── Budget.java
+│   │   │       │   ├── Category.java
+│   │   │       │   └── Otp.java
+│   │   │       │
+│   │   │       ├── enums/
+│   │   │       │   ├── AuthProvider.java
+│   │   │       │   ├── CategoryType.java
+│   │   │       │   ├── PaymentMethod.java
+│   │   │       │   └── Role.java
+│   │   │       │
+│   │   │       ├── exception/
+│   │   │       │   ├── BadRequestException.java
+│   │   │       │   ├── DuplicateResourceException.java
+│   │   │       │   ├── ErrorResponse.java
+│   │   │       │   ├── GlobalExceptionHandler.java
+│   │   │       │   └── ResourceNotFoundException.java
+│   │   │       │
+│   │   │       ├── repository/
+│   │   │       │   ├── UserRepository.java
+│   │   │       │   ├── ExpenseRepository.java
+│   │   │       │   ├── IncomeRepository.java
+│   │   │       │   ├── BudgetRepository.java
+│   │   │       │   ├── CategoryRepository.java
+│   │   │       │   └── OtpRepository.java
+│   │   │       │
+│   │   │       ├── scheduler/
+│   │   │       │   └── MonthlyReportEmailScheduler.java
+│   │   │       │
+│   │   │       ├── security/
+│   │   │       │   ├── CustomUserDetailsService.java
+│   │   │       │   ├── JwtAuthenticationEntryPoint.java
+│   │   │       │   ├── JwtAuthenticationFilter.java
+│   │   │       │   ├── JwtService.java
+│   │   │       │   ├── UserPrincipal.java
+│   │   │       │   │
+│   │   │       │   └── OAuth2/
+│   │   │       │       ├── CustomOidcUserPrincipal.java
+│   │   │       │       ├── CustomOidcUserService.java
+│   │   │       │       ├── OAuth2AuthenticationFailureHandler.java
+│   │   │       │       └── OAuth2AuthenticationSuccessHandler.java
+│   │   │       │
+│   │   │       ├── service/
+│   │   │       │   ├── AuthService.java
+│   │   │       │   ├── BudgetService.java
+│   │   │       │   ├── CategoryService.java
+│   │   │       │   ├── DashboardService.java
+│   │   │       │   ├── EmailService.java
+│   │   │       │   ├── ExpenseService.java
+│   │   │       │   ├── IncomeService.java
+│   │   │       │   ├── MonthlyReportEmailService.java
+│   │   │       │   ├── OtpService.java
+│   │   │       │   ├── ProfileService.java
+│   │   │       │   ├── ReportService.java
+│   │   │       │   │
+│   │   │       │   └── impl/
+│   │   │       │       ├── AuthServiceImpl.java
+│   │   │       │       ├── BudgetServiceImpl.java
+│   │   │       │       ├── CategoryServiceImpl.java
+│   │   │       │       ├── DashboardServiceImpl.java
+│   │   │       │       ├── EmailServiceImpl.java
+│   │   │       │       ├── ExpenseServiceImpl.java
+│   │   │       │       ├── IncomeServiceImpl.java
+│   │   │       │       ├── MonthlyReportEmailService.java
+│   │   │       │       ├── OtpServiceImpl.java
+│   │   │       │       ├── ProfileServiceImpl.java
+│   │   │       │       └── ReportServiceImpl.java
+│   │   │       │
+│   │   │       ├── specification/
+│   │   │       │   ├── BudgetSpecification.java
+│   │   │       │   ├── ExpenseSpecification.java
+│   │   │       │   └── IncomeSpecification.java
+│   │   │       │
+│   │   │       ├── util/
+│   │   │       │   ├── CurrentUserService.java
+│   │   │       │   └── PaginationUtil.java
+│   │   │       │
+│   │   │       └── validation/
+│   │   │           ├── ValidationGroups.java
+│   │   │           └── ValidationSequence.java
+│   │   │
+│   │   └── resources/
+│   │       └── application.yml
+│   │
+│   └── test/
+│       └── java/
+│           └── com/
+│               └── expensetracker/
+│                   └── SmartExpenseTrackerApplicationTests.java
+│
+├── .mvn/
+│   └── wrapper/
+│       └── maven-wrapper.properties
+│
+├── .dockerignore
+├── .gitattributes
+├── .gitignore
+├── Dockerfile
+├── mvnw
+├── mvnw.cmd
+├── pom.xml
+└── README.md
