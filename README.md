@@ -3,14 +3,12 @@
 
 # 2️⃣ Backend — `README.md`
 
-```markdown
 # 💰 Smart Expense Tracker — Backend
 
 A secure and scalable **RESTful backend** for the Smart Expense Tracker application, built using **Java and Spring Boot**.
 
 The backend provides authentication, authorization, financial transaction management, budgeting, reporting, profile management and email notification services.
 
----
 
 ## 🚀 Overview
 
@@ -32,7 +30,6 @@ This repository contains the backend responsible for:
 
 The backend exposes REST APIs consumed by the React frontend.
 
----
 
 ## ✨ Key Features
 
@@ -133,7 +130,6 @@ Email functionality includes:
 - SMTP email configuration
 - Resend email service integration
 
----
 
 ## 🛠️ Tech Stack
 
@@ -178,13 +174,11 @@ Email functionality includes:
 - SMTP
 - Resend
 
----
 
 ## 🏗️ Architecture
 
 The application follows a layered architecture:
 
-```text
 Client
   │
   ▼
@@ -198,3 +192,25 @@ Repository Layer
   │
   ▼
 MySQL Database
+
+## 🔐 Security Flow 
+
+Client
+  │
+  ▼
+Spring Security
+  │
+  ├── JWT Authentication
+  │
+  └── Google OAuth 2.0
+          │
+          ▼
+     Authenticated User
+          │
+          ▼
+      Controllers
+
+
+## 📂 Project Structure
+
+
