@@ -1,8 +1,3 @@
-
----
-
-# 2️⃣ Backend — `README.md`
-
 # 💰 Smart Expense Tracker — Backend
 
 A secure and scalable **RESTful backend** for the Smart Expense Tracker application, built using **Java and Spring Boot**.
